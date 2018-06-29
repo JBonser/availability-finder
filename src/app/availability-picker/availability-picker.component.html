@@ -1,3 +1,28 @@
+<div flex layout = "row" class="calendar-nav">
+  <div>
+    <button mat-raised-button color="accent"
+      mwlCalendarPreviousView
+      [(viewDate)]="viewDate"
+      [view]="view">
+      Previous
+    </button>
+  </div>
+  <div>
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+  </div>
+  <div>
+    <button mat-raised-button color="accent"
+      mwlCalendarNextView
+      [(viewDate)]="viewDate"
+      [view]="view">
+      Next
+    </button>
+  </div>
+</div>
+
+
 <mwl-calendar-month-view
-  [viewDate]="viewDate">
+  [viewDate]="viewDate"
+  (beforeViewRender)="beforeMonthViewRender2($event)"
+  (dayClicked)="dayClicked($event.day)">
 </mwl-calendar-month-view>

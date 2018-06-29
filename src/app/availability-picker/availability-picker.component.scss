@@ -1,0 +1,23 @@
+@import "~src/theme.scss";
+
+.cal-day-selected,
+.cal-day-selected:hover {
+  color: mat-color($accent, darker);
+  background-color: mat-color($primary, lighter) !important;
+  font-weight: 700 !important;
+}
+
+.button-row {
+  text-align: center;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.calendar-nav div {
+  margin: 1.2em;
+}

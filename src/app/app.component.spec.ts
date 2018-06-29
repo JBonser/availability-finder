@@ -1,16 +1,18 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { MatToolbarModule } from '@angular/material/';
+import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule } from 'angular-calendar';
-
 import { AvailabilityPickerComponent } from './availability-picker/availability-picker.component';
+
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         MatToolbarModule,
+        MatButtonModule,
         BrowserAnimationsModule,
         CalendarModule.forRoot()
       ],
