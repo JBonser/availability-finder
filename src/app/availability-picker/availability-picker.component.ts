@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-availability-picker',
@@ -6,10 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./availability-picker.component.css']
 })
 export class AvailabilityPickerComponent implements OnInit {
-
+  viewDate: Date = new Date();
   constructor() { }
 
   ngOnInit() {
   }
-
 }
