@@ -9,7 +9,7 @@ import { AppMaterialsModule } from './app-materials.module';
 import { CalendarModule } from 'angular-calendar';
 import { AvailabilityPickerComponent
 } from './components/availability-picker/availability-picker.component';
-import { routing } from './app-routing';
+import { AppRoutingModule } from './app-routing.module';
 import { AuthService } from './services/auth.service';
 
 // used to create fake backend
@@ -32,7 +32,7 @@ import { LoginComponent } from './components/login/login.component';
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
-    routing,
+    AppRoutingModule,
     AppMaterialsModule,
     CalendarModule.forRoot()
   ],
