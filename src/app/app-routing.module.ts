@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AvailabilityPickerComponent } from './availability-picker/availability-picker.component';
+import { AvailabilityPickerComponent
+} from './components/availability-picker/availability-picker.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/availability', pathMatch: 'full' },
