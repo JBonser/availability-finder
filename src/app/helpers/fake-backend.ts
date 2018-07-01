@@ -27,7 +27,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
             // get users
             if (request.url.endsWith('/api/users') && request.method === 'GET') {
-                // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
+                // check for fake auth token in header and return users if
+                // valid, this security is implemented server side in a real application
                 if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
                     return of(new HttpResponse({ status: 200, body: [testUser] }));
                 } else {

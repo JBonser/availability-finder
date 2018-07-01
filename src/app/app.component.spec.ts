@@ -1,30 +1,21 @@
 import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { APP_BASE_HREF } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/';
-import { MatButtonModule } from '@angular/material/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarModule } from 'angular-calendar';
-import { AvailabilityPickerComponent
-} from './components/availability-picker/availability-picker.component';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RouterModule, Routes } from '@angular/router';
+
+import { AppComponent } from './app.component';
+import { AppMaterialsModule } from './app-materials.module';
 import { AppRoutingModule } from './app-routing.module';
+
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [
-        MatToolbarModule,
-        MatButtonModule,
-        BrowserAnimationsModule,
-        RouterTestingModule,
-        CalendarModule.forRoot()
-      ],
       declarations: [
-        AppComponent,
-        AvailabilityPickerComponent
+        AppComponent
       ],
+      imports: [
+        AppMaterialsModule,
+        AppRoutingModule
+      ]
     }).compileComponents();
   }));
   it(`should create the 'app'`, async(() => {

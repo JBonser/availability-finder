@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppMaterialsModule } from '../app-materials.module';
 import { CalendarModule } from 'angular-calendar';
-import { MatButtonModule } from '@angular/material/button';
 
 import { AvailabilityPickerComponent } from './availability-picker.component';
 
@@ -13,8 +12,7 @@ describe('AvailabilityPickerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
+        AppMaterialsModule,
         CalendarModule.forRoot() ],
       declarations: [ AvailabilityPickerComponent ]
     })
