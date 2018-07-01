@@ -4,14 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { MatToolbarModule } from '@angular/material/';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { AppMaterialsModule } from './app-materials.module';
 import { CalendarModule } from 'angular-calendar';
 import { AvailabilityPickerComponent
 } from './components/availability-picker/availability-picker.component';
@@ -39,12 +33,7 @@ import { LoginComponent } from './components/login/login.component';
     FormsModule,
     BrowserAnimationsModule,
     routing,
-    MatToolbarModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatCardModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
+    AppMaterialsModule,
     CalendarModule.forRoot()
   ],
   providers: [
