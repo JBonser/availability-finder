@@ -7,10 +7,11 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
   templateUrl: './availability-picker.component.html',
   styleUrls: ['./availability-picker.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvailabilityPickerComponent implements OnInit {
   viewDate: Date = new Date();
-  viewDates: CalendarMonthViewDay[] = [];
+  viewDates: Date[] = [];
   selectedDate: CalendarMonthViewDay;
   view = 'month';
 
@@ -20,36 +21,28 @@ export class AvailabilityPickerComponent implements OnInit {
   ngOnInit() {}
 
   dayClicked(day: CalendarMonthViewDay): void {
-    const index =  this.viewDates.indexOf(day);
+    const index =  this.viewDates.indexOf(day.date);
     if (index !== -1) {
        this.viewDates.splice(index, 1);
        delete day.cssClass;
     } else {
       const newDay: CalendarMonthViewDay = day;
-      this.viewDates.push(newDay);
+      this.viewDates.push(day.date);
       newDay.cssClass = 'cal-day-selected';
     }
   }
 
-  beforeMonthViewRender2({ body }: { body: CalendarMonthViewDay[] }): void {
-    body.forEach(day => {
-      if ( this.viewDates &&
-           this.viewDates.indexOf(day) !== -1) {
-        day.cssClass = 'cal-day-selected';
-        this.selectedDate = day;
-      }
-    });
-  }
-
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+    console.log(this.viewDates)
     body.forEach(day => {
-      if (
-        this.selectedDate &&
-        day.date.getTime() === this.selectedDate.date.getTime()
-      ) {
-        day.cssClass = 'cal-day-selected';
-        this.selectedDate = day;
-      }
-    });
+      if (this.viewDates) {
+        this.viewDates.forEach(viewDate => {
+          // Comparison only work with getTime as that uses milliseconds
+          if (viewDate.getTime() === day.date.getTime()) {
+          day.cssClass = 'cal-day-selected';
+          this.selectedDate = day;
+        }
+      });
+    }
   }
 }
