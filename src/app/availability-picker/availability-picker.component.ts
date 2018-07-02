@@ -33,7 +33,6 @@ export class AvailabilityPickerComponent implements OnInit {
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
-    console.log(this.viewDates)
     body.forEach(day => {
       if (this.viewDates) {
         this.viewDates.forEach(viewDate => {
@@ -41,8 +40,9 @@ export class AvailabilityPickerComponent implements OnInit {
           if (viewDate.getTime() === day.date.getTime()) {
           day.cssClass = 'cal-day-selected';
           this.selectedDate = day;
-        }
-      });
-    }
+          }
+        });
+      }
+    });
   }
 }
