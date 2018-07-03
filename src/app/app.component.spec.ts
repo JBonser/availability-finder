@@ -1,4 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
@@ -14,7 +15,8 @@ describe('AppComponent', () => {
       ],
       imports: [
         AppMaterialsModule,
-        AppRoutingModule
+        AppRoutingModule,
+        HttpClientModule
       ]
     }).compileComponents();
   }));

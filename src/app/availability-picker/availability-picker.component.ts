@@ -3,7 +3,8 @@ import { Component, ChangeDetectionStrategy,
 import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
 import { AvailableDatesService } from '../services/available-date.service';
 import { Observable, Subject, interval } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { delay, takeWhile } from 'rxjs/operators';
+import { UserDate } from '../models/user-date';
 
 @Component({
   selector: 'app-availability-picker',
@@ -16,7 +17,7 @@ import { delay } from 'rxjs/operators';
 export class AvailabilityPickerComponent implements OnInit, OnDestroy {
   refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
-  viewDates: Date[];
+  viewDates: UserDate[];
   selectedDate: CalendarMonthViewDay;
   view = 'month';
   alive = true;
@@ -26,6 +27,7 @@ export class AvailabilityPickerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getDatesForUser(1);
+    this.refresh.next();
   }
 
   ngOnDestroy() {
@@ -33,28 +35,35 @@ export class AvailabilityPickerComponent implements OnInit, OnDestroy {
   }
 
   getDatesForUser(id: number): void {
-    this.datesService.getDatesForUser(id).subscribe(this.refresh.asObservable);
-    this.datesService.getDatesForUser(id).subscribe(dates => { this.viewDates = dates; });
+    this.datesService.getDatesForUser(id).pipe(takeWhile(() => this.alive)).subscribe(this.refresh.asObservable);
+    this.datesService.getDatesForUser(id).pipe(takeWhile(() => this.alive)).subscribe(dates => { this.viewDates = dates; });
   }
 
   dayClicked(day: CalendarMonthViewDay): void {
-    const index =  this.viewDates.indexOf(day.date);
+    const index = this.viewDates.findIndex( userDate => userDate.date === day.date );
     if (index !== -1) {
-       this.viewDates.splice(index, 1);
-       delete day.cssClass;
+      this.datesService.removeDateById(this.viewDates[index].id)
+      .subscribe(subDay => {
+        this.viewDates.splice(index, 1);
+      });
+      delete day.cssClass;
     } else {
       const newDay: CalendarMonthViewDay = day;
-      this.viewDates.push(day.date);
+      this.datesService.addDateForUser(1, new UserDate(7, 1, day.date))
+      .subscribe(subDay => {
+        this.viewDates.push(subDay);
+      });
       newDay.cssClass = 'cal-day-selected';
     }
   }
 
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
+    console.log(this.viewDates);
     body.forEach(day => {
       if (this.viewDates) {
           this.viewDates.forEach(viewDate => {
           // Comparison only work with getTime as that uses milliseconds
-          if (viewDate.getTime() === day.date.getTime()) {
+          if (viewDate.date.getTime() === day.date.getTime()) {
           day.cssClass = 'cal-day-selected';
           this.selectedDate = day;
           }
