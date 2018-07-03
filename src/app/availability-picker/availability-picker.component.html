@@ -22,6 +22,7 @@
 
 <mwl-calendar-month-view
   [viewDate]="viewDate"
+  [refresh]="refresh"
   (beforeViewRender)="beforeMonthViewRender($event)"
   (dayClicked)="dayClicked($event.day)">
 </mwl-calendar-month-view>

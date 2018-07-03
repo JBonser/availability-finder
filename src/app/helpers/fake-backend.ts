@@ -9,11 +9,14 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor() { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        let testUser = { id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' };
-
+        const testUser = { id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' };
+        const testUserDates = [
+          [new Date('2018-07-14T00:00:00'), new Date('2018-07-15T00:00:00')],
+          [new Date('2018-07-12T00:00:00'), new Date('2018-07-11T00:00:00')]
+        ];
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(mergeMap(() => {
-
+            console.log(request.url);
             // authenticate
             if (request.url.endsWith('/api/authenticate') && request.method === 'POST') {
                 if (request.body.username === testUser.username && request.body.password === testUser.password) {
@@ -36,15 +39,30 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     return throwError({ error: { message: 'Unauthorised' } });
                 }
             }
+            // get user by id
+            if (request.url.match(/\/api\/available-dates\/\d+$/) && request.method === 'GET') {
+                // check for fake auth token in header and return user if valid,
+                // this security is implemented server side in a real application
+                if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
+                    // find user by id in users array
+                    const urlParts = request.url.split('/');
+                    const id = parseInt(urlParts[urlParts.length - 1], 10);
+                    const userDates = testUserDates[id];
+                    return of(new HttpResponse({ status: 200, body: userDates }));
+                } else {
+                    // return 401 not authorised if token is null or invalid
+                    return throwError({ error: { message: 'Unauthorised' } });
+                }
 
             // pass through any requests not handled above
             return next.handle(request);
 
         }))
 
-        // call materialize and dematerialize to ensure delay even if an error is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648)
+        // call materialize and dematerialize to ensure delay even if an error
+        // is thrown (https://github.com/Reactive-Extensions/RxJS/issues/648)
         .pipe(materialize())
-        .pipe(delay(500))
+        //.pipe(delay(500))
         .pipe(dematerialize());
     }
 }

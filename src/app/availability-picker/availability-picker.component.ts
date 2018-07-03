@@ -1,6 +1,9 @@
 import { Component, ChangeDetectionStrategy,
-  OnInit, ViewEncapsulation } from '@angular/core';
+  OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
+import { AvailableDatesService } from '../services/available-date.service';
+import { Observable, Subject, interval } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-availability-picker',
@@ -9,16 +12,30 @@ import { CalendarEvent, CalendarMonthViewDay } from 'angular-calendar';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AvailabilityPickerComponent implements OnInit {
+
+export class AvailabilityPickerComponent implements OnInit, OnDestroy {
+  refresh: Subject<any> = new Subject();
   viewDate: Date = new Date();
-  viewDates: Date[] = [];
+  viewDates: Date[];
   selectedDate: CalendarMonthViewDay;
   view = 'month';
+  alive = true;
 
-  constructor() {
+  constructor(private datesService: AvailableDatesService) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getDatesForUser(1);
+  }
+
+  ngOnDestroy() {
+    this.alive = false; // switches your IntervalObservable of
+  }
+
+  getDatesForUser(id: number): void {
+    this.datesService.getDatesForUser(id).subscribe(this.refresh.asObservable);
+    this.datesService.getDatesForUser(id).subscribe(dates => { this.viewDates = dates; });
+  }
 
   dayClicked(day: CalendarMonthViewDay): void {
     const index =  this.viewDates.indexOf(day.date);
@@ -35,7 +52,7 @@ export class AvailabilityPickerComponent implements OnInit {
   beforeMonthViewRender({ body }: { body: CalendarMonthViewDay[] }): void {
     body.forEach(day => {
       if (this.viewDates) {
-        this.viewDates.forEach(viewDate => {
+          this.viewDates.forEach(viewDate => {
           // Comparison only work with getTime as that uses milliseconds
           if (viewDate.getTime() === day.date.getTime()) {
           day.cssClass = 'cal-day-selected';
