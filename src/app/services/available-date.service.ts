@@ -6,6 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 
 import { User } from '../models/user';
 import { UserDate } from '../models/user-date';
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -13,8 +14,11 @@ const httpOptions = {
 
 @Injectable({ providedIn: 'root' })
 export class AvailableDatesService {
+  baseUrl = environment.baseUrl;
+  private datesUrl = this.baseUrl + '/api/available-dates';  // URL to web api
+
     constructor(private http: HttpClient) { }
-    private datesUrl = '/api/available-dates';  // URL to web api
+
 
     getAllDates() {
         return this.http.get<Date[]>(this.datesUrl);

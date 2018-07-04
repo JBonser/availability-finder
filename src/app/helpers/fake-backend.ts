@@ -3,11 +3,12 @@ import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTT
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { UserDate } from '../models/user-date';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
     testUserDates = [];
-    testUser = { id: 1, username: 'test', password: 'test', firstName: 'Test', lastName: 'User' };
+    testUser = { id: 1, email: 'test', password: 'test', firstName: 'Test', lastName: 'User' };
     dateIdCounter = 6;
 
     constructor() {
@@ -22,15 +23,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (environment.production) {
+          return next.handle(request);
+        }
 
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(mergeMap(() => {
-            console.log(request.url);
             // authenticate
-            if (request.url.endsWith('/api/authenticate') && request.method === 'POST') {
-                if (request.body.username === this.testUser.username && request.body.password === this.testUser.password) {
+            if (request.url.endsWith('/api/users/authenticate') && request.method === 'POST') {
+                if (request.body.auth.email === this.testUser.email && request.body.auth.password === this.testUser.password) {
                     // if login details are valid return 200 OK with a fake jwt token
-                    return of(new HttpResponse({ status: 200, body: { token: 'fake-jwt-token' } }));
+                    return of(new HttpResponse({ status: 200, body: { jwt: 'fake-jwt-token' } }));
                 } else {
                     // else return 400 bad request
                     return throwError({ error: { message: 'Username or password is incorrect' } });

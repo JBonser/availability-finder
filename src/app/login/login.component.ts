@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
-    username: string;
+    email: string;
     password: string;
 
     constructor(
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     onSubmit() {
 
         this.loading = true;
-        this.authenticationService.login(this.username, this.password)
+        this.authenticationService.login(this.email, this.password)
             .pipe(first())
             .subscribe(
                 data => {
