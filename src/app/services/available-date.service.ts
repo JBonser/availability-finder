@@ -15,7 +15,7 @@ const httpOptions = {
 @Injectable({ providedIn: 'root' })
 export class AvailableDatesService {
   baseUrl = environment.baseUrl;
-  private datesUrl = this.baseUrl + '/api/available-dates';  // URL to web api
+  private datesUrl = this.baseUrl + '/api/userdates';  // URL to web api
 
     constructor(private http: HttpClient) { }
 
@@ -26,13 +26,13 @@ export class AvailableDatesService {
 
     getDatesForUser(id: number): Observable<UserDate[]> {
       return this.http.get<UserDate[]>(`${this.datesUrl}/user/${id}`, httpOptions).pipe(
-        tap(date => console.log(date))
+        tap( date => console.log(date))
       );
     }
 
     addDateForUser(id: number, date: UserDate): Observable<UserDate> {
       console.log(`Add Date For User: ${id}`);
-      return this.http.post<UserDate>(`${this.datesUrl}/user/${id}`, date);
+      return this.http.post<UserDate>(`${this.datesUrl}`, date);
     }
 
     removeDateById(id: number): Observable<UserDate> {

@@ -53,7 +53,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             }
 
             // Get Dates By User ID
-            if (request.url.match(/\/api\/available-dates\/user\/\d+$/) && request.method === 'GET') {
+            if (request.url.match(/\/api\/userdates\/user\/\d+$/) && request.method === 'GET') {
                 // check for fake auth token in header and return user if valid,
                 // this security is implemented server side in a real application
                 if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
@@ -76,14 +76,11 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 }
               }
 
-              // Add Date by User ID
-              if (request.url.match(/\/api\/available-dates\/user\/\d+$/) && request.method === 'POST') {
+              // Add Date
+              if (request.url.endsWith('/api/userdates') && request.method === 'POST') {
                   // check for fake auth token in header and return user if valid,
                   // this security is implemented server side in a real application
                   if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
-                      // find user by id in users array
-                      const urlParts = request.url.split('/');
-                      const id = parseInt(urlParts[urlParts.length - 1], 10);
                       const foundMatch = this.testUserDates.find( date => {
                         return date.date.getTime() === request.body.date.getTime() && request.body.userId === date.userId; });
                       if (!foundMatch) {

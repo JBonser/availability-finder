@@ -17,8 +17,8 @@ import { AvailableDatesService } from '../services/available-date.service';
 
 @NgModule({
   imports: [
-    HttpModule,
     HttpClientModule,
+    HttpModule,
     AppMaterialsModule,
     CalendarModule.forRoot(),
     AvailabilityPickerRoutingModule],
