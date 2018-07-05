@@ -96,7 +96,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                 }
 
                 // Remove Date ID
-                if (request.url.match(/\/api\/available-dates\/\d+$/) && request.method === 'DELETE') {
+                if (request.url.match(/\/api\/userdates\/\d+$/) && request.method === 'DELETE') {
                     // check for fake auth token in header and return user if valid,
                     // this security is implemented server side in a real application
                     if (request.headers.get('Authorization') === 'Bearer fake-jwt-token') {
